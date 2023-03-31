@@ -49,15 +49,15 @@ Testing Structure:
 
 Authentication Security:
 
-    I used JWT based authentication to securely log in users and safely pass user data between endpoints and the server. I used middelware to ensure that users and admins can safely access the appropriate routes. 
+>   I used JWT based authentication to securely log in users and safely pass user data between endpoints and the server. I used middelware to ensure that users and admins can safely access the appropriate routes. 
 
 Error Handling:
 
-    I used custom error classes, JSON schemas, and middleware to inform the user of any potential errors made while using the API. 
+>   I used custom error classes, JSON schemas, and middleware to inform the user of any potential errors made while using the API. 
 
 Improvements:
 
-    I'd like to add more security features for the application, technical skills needed for jobs, as well as technical skills for each user. I've also added simple to do lists at the bottom of some files for individual tasks I'd like to accomplish for that specific file. 
+>   I'd like to add more security features for the application, technical skills needed for jobs, as well as technical skills for each user. I've also added simple to do lists at the bottom of some files for individual tasks I'd like to accomplish for that specific file. 
 
 ## API Usage Guide
 
