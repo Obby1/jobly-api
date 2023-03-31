@@ -27,7 +27,7 @@ Admin Login Credentials:
     Send POST request to http://localhost:3001/auth/token
     {
 
-  "username": "testuser",
+  "username": "testadmin",
   "password": "password"
 
     }
@@ -52,13 +52,23 @@ To register a new user send POST to http://localhost:3001/auth/register:
           "email": "new@email.com"
      }
     
-To run the tests:
+To create new company POST to http://localhost:3001/companies
+[admin privelage required]
+    
+    Sample new company:
+    {
+      "handle": "new",
+      "name": "New Co",
+      "description": "New test company",
+      "numEmployees": 10,
+      "logoUrl": "http://new.img"
+    }
 
-    jest -i
-
-To run the tests:
-
-    jest -i
+To get list of companies, GET to http://localhost:3001/companies?minEmployees=0&maxEmployees=200
+[anonymous requests ok]
+    Optional filters can be added or removed:
+    minEmployees= any num
+    maxEmployees= any num
 
 To run the tests:
 

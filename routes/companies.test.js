@@ -5,15 +5,6 @@ const request = require("supertest");
 const db = require("../db");
 const app = require("../app");
 
-/*
-To Do:
-- [x] Add more tests for 99% coverage
-- [x] Clean up comments 
-
-
-*/
-
-
 
 const {
   commonBeforeAll,
@@ -32,7 +23,6 @@ afterAll(commonAfterAll);
 /************************************** POST /companies route tests */
 
 describe("POST /companies", function () {
-  // Sample company to be added
   const newCompany = {
     handle: "new",
     name: "New",

@@ -15,10 +15,10 @@ const companyUpdateSchema = require("../schemas/companyUpdate.json");
 const router = new express.Router();
 
 
-/** POST / { company } =>  { company }
- * company should be { handle, name, description, numEmployees, logoUrl }
- * Returns { handle, name, description, numEmployees, logoUrl 
- * Authorization required: login
+/* 
+POST to /companies 
+{ handle, name, description, numEmployees, logoUrl } =>  { company }
+Authorization required: login
 */
 router.post("/", ensureAdmin, async function (req, res, next) {
   try {
@@ -35,29 +35,15 @@ router.post("/", ensureAdmin, async function (req, res, next) {
   }
 });
 
-/** GET /  =>
- *   { companies: [ { handle, name, description, numEmployees, logoUrl }, ...] }
- *
+/*
+ GET to /companies  
+ => { companies: [ { handle, name, description, numEmployees, logoUrl }, ...] }
  * Can filter on provided search filters:
  * - minEmployees
  * - maxEmployees
  * - nameLike (will find case-insensitive, partial matches)
- *
- * Authorization required: none
- */
-
-// // old route:
-// router.get("/", async function (req, res, next) {
-//   try {
-//     const companies = await Company.findAll();
-//     return res.json({ companies });
-//   } catch (err) {
-//     return next(err);
-//   }
-// });
-
-// new route:
-// Update the GET route to pass the filters to the findAll method
+Authorization required: none
+*/
 router.get("/", async function (req, res, next) {
   try {
     // create filters object from query string, assign int to values, and pass to findAll
