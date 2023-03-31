@@ -39,7 +39,7 @@ Copy/paste token to Auth Type "Bearer Token" for auth
 	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTY4MDI4MTExOH0.j14bPEoXZf6dBdZq1HmaRfhuxUGtkCa7TaoOFmfYVIo"
     }
 
-To register a new user send POST to http://localhost:3001/auth/register:
+To register a new user send POST to http://localhost:3001/auth/register
 
     Sample new user:
     {
@@ -71,13 +71,13 @@ To get list of companies, GET to http://localhost:3001/companies?minEmployees=0&
         maxEmployees= any num
         name = any string
 
-To get request on specific company, GET to http://localhost:3001/companies/handle
+To get request on specific company, GET to http://localhost:3001/companies/:handle
 [anonymous requests ok]
 
     Sample company get request:
     http://localhost:3001/companies/anderson-arias-morrow
 
-To patch / delete a specific company, PATCH/DELETE to http://localhost:3001/companies/handle
+To patch / delete a specific company, PATCH/DELETE to http://localhost:3001/companies/:handle
 [admin token required]
 
     PATCH: http://localhost:3001/companies/anderson-arias-morrow
@@ -86,6 +86,10 @@ To patch / delete a specific company, PATCH/DELETE to http://localhost:3001/comp
 	   "name": "anderson-arias-morrow-new"
     }
 
+    DELETE: http://localhost:3001/companies/anderson-arias-morrow
+
+
+### JOBS ROUTES  
 To post new job, POST to http://localhost:3001/jobs
 [admin token required]
 
@@ -99,33 +103,35 @@ To post new job, POST to http://localhost:3001/jobs
 To get all jobs, GET to http://localhost:3001/jobs
 [anonymous requests ok]
 
-    jest -i
+    Sample get request:
+    http://localhost:3001/jobs
 
-To get job from job id, GET to http://localhost:3001/jobs/id
+To get job from job id, GET to http://localhost:3001/jobs/:id
 [anonymous requests ok]
 
     Sample get request:
     http://localhost:3001/jobs/204
 
-To get job from company handle, GET to http://localhost:3001/jobs/companies/handle
+To get job from company handle, GET to http://localhost:3001/jobs/companies/:handle
 [anonymous requests ok]
 
     Sample get request:
     http://localhost:3001/jobs/companies/hall-davis
 
-To get job from job id, GET to http://localhost:3001/jobs/jobid
+To get job from job id, GET to http://localhost:3001/jobs/:jobid
 [anonymous requests ok]
 
     Sample get request:
     http://localhost:3001/jobs/56
 
 
-To delete job from job id, DELETE to http://localhost:3001/jobs/jobid
+To delete job from job id, DELETE to http://localhost:3001/jobs/:jobid
 [admin token required]
 
     Sample delete request:
     http://localhost:3001/jobs/206
 
+### USER ROUTES  
 To create a new user as admin, POST to http://localhost:3001/users
 [admin token required]
 
@@ -138,10 +144,36 @@ To create a new user as admin, POST to http://localhost:3001/users
         "isAdmin": false
     }
 
-To run the tests:
+To post a new job application, POST to http://localhost:3001/users/:username/jobs/:jobid
+[admin or matching user required]
 
-    jest -i
+    Sample post job application request:
+    http://localhost:3001/users/u-new/jobs/2
 
-To retreive information on jobs:
+To get all users, GET to http://localhost:3001/users
+[admin token required]
 
-    jest -i
+    Sample get request:
+    http://localhost:3001/users
+
+
+To get specific user info, GET to http://localhost:3001/users/:username
+[admin or matching user required]
+
+    Sample get request:
+    http://localhost:3001/users/testuser
+
+To update user info, PATCH to http://localhost:3001/users/:username
+[admin or matching user required]
+
+    Sample patch request:
+    http://localhost:3001/users/testuser
+    {
+		"email": "joel@joelburton.com"
+    }
+
+To delete user, DELETE to http://localhost:3001/users/:username
+[admin or matching user required]
+
+    Sample delete request:
+    http://localhost:3001/users/u-new
