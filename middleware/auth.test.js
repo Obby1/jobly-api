@@ -14,10 +14,8 @@ const badJwt = jwt.sign({ username: "test", isAdmin: false }, "wrong");
 
 
 describe("authenticateJWT", function () {
-  test("works: via header", function () {
+  test("works: Bearer Token via header", function () {
     expect.assertions(2);
-     //there are multiple ways to pass an authorization token, this is how you pass it in the header.
-    //this has been provided to show you another way to pass the token. you are only expected to read this code for this project.
     const req = { headers: { authorization: `Bearer ${testJwt}` } };
     const res = { locals: {} };
     const next = function (err) {
@@ -33,7 +31,7 @@ describe("authenticateJWT", function () {
     });
   });
 
-  test("works: no header", function () {
+  test("no header returns empty object", function () {
     expect.assertions(2);
     const req = {};
     const res = { locals: {} };
@@ -44,7 +42,7 @@ describe("authenticateJWT", function () {
     expect(res.locals).toEqual({});
   });
 
-  test("works: invalid token", function () {
+  test("invalid token returns empty object", function () {
     expect.assertions(2);
     const req = { headers: { authorization: `Bearer ${badJwt}` } };
     const res = { locals: {} };
@@ -58,21 +56,25 @@ describe("authenticateJWT", function () {
 
 
 describe("ensureLoggedIn", function () {
+  // Test to ensure ensureLoggedIn middleware works by calling next with no error
   test("works", function () {
+    // ensure one assertion is made in this test - (expect(err).toBeFalsy())
     expect.assertions(1);
     const req = {};
+    // def res.locals.user to mock logged in user
     const res = { locals: { user: { username: "test", is_admin: false } } };
     const next = function (err) {
       expect(err).toBeFalsy();
     };
     ensureLoggedIn(req, res, next);
   });
-
+  // Test to ensure ensureLoggedIn middleware works by calling next with error
   test("unauth if no login", function () {
     expect.assertions(1);
     const req = {};
     const res = { locals: {} };
     const next = function (err) {
+      // err will trigger as res.locals.user is undefined / no user logged in 
       expect(err instanceof UnauthorizedError).toBeTruthy();
     };
     ensureLoggedIn(req, res, next);

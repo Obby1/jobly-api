@@ -15,7 +15,7 @@ beforeEach(commonBeforeEach);
 afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
-/************************************** create */
+/************************************** tests for create */
 
 describe("create", function () {
   const newCompany = {
@@ -26,10 +26,9 @@ describe("create", function () {
     logoUrl: "http://new.img",
   };
 
-  test("works", async function () {
+  test("creating newCompany works", async function () {
     let company = await Company.create(newCompany);
     expect(company).toEqual(newCompany);
-
     const result = await db.query(
           `SELECT handle, name, description, num_employees, logo_url
            FROM companies
@@ -45,21 +44,20 @@ describe("create", function () {
     ]);
   });
 
-  test("bad request with dupe", async function () {
+  test("creating same new company twice results in error", async function () {
     try {
       await Company.create(newCompany);
       await Company.create(newCompany);
-      fail();
     } catch (err) {
       expect(err instanceof BadRequestError).toBeTruthy();
     }
   });
 });
 
-/************************************** findAll */
+/************************************** findAll test */
 
 describe("findAll", function () {
-  test("works: no filter", async function () {
+  test("find all with no filters applied works as intended", async function () {
     let companies = await Company.findAll();
     expect(companies).toEqual([
       {
@@ -87,10 +85,10 @@ describe("findAll", function () {
   });
 });
 
-/************************************** get */
+// /************************************** get tests*/
 
 describe("get", function () {
-  test("works", async function () {
+  test("get company works as intended", async function () {
     let company = await Company.get("c1");
     expect(company).toEqual({
       handle: "c1",
@@ -101,17 +99,16 @@ describe("get", function () {
     });
   });
 
-  test("not found if no such company", async function () {
+  test("returns not found error if no such company exists", async function () {
     try {
       await Company.get("nope");
-      fail();
     } catch (err) {
       expect(err instanceof NotFoundError).toBeTruthy();
     }
   });
 });
 
-/************************************** update */
+/************************************** update tests */
 
 describe("update", function () {
   const updateData = {
@@ -121,7 +118,7 @@ describe("update", function () {
     logoUrl: "http://new.img",
   };
 
-  test("works", async function () {
+  test("update works as intended", async function () {
     let company = await Company.update("c1", updateData);
     expect(company).toEqual({
       handle: "c1",
@@ -141,7 +138,7 @@ describe("update", function () {
     }]);
   });
 
-  test("works: null fields", async function () {
+  test("setting num employees and logo url to null works", async function () {
     const updateDataSetNulls = {
       name: "New",
       description: "New Description",
@@ -168,19 +165,17 @@ describe("update", function () {
     }]);
   });
 
-  test("not found if no such company", async function () {
+  test("if company doesn't exist return not found error", async function () {
     try {
       await Company.update("nope", updateData);
-      fail();
     } catch (err) {
       expect(err instanceof NotFoundError).toBeTruthy();
     }
   });
 
-  test("bad request with no data", async function () {
+  test("return bad request if data is missing", async function () {
     try {
       await Company.update("c1", {});
-      fail();
     } catch (err) {
       expect(err instanceof BadRequestError).toBeTruthy();
     }
@@ -200,7 +195,6 @@ describe("remove", function () {
   test("not found if no such company", async function () {
     try {
       await Company.remove("nope");
-      fail();
     } catch (err) {
       expect(err instanceof NotFoundError).toBeTruthy();
     }

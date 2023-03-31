@@ -139,6 +139,28 @@ class User {
 
     if (!user) throw new NotFoundError(`No user: ${username}`);
 
+    // // Retrieve a list of job IDs that the user has applied for
+    // const applicationsRes = await db.query(
+    //   `SELECT job_id AS "jobId"
+    //     FROM applications
+    //     WHERE username = $1`,
+    //   [username],
+    // );  
+    // // applicationsRes.rows is an array of objects, each with a jobId property
+    // const jobIds = applicationsRes.rows.map((application) => application.jobId);
+    // user.jobApplications = jobIds;
+
+    // Instead of appending job IDs, append the job titles using inner Join on matching vals
+    const applicationsRes = await db.query(
+      `SELECT j.title, a.job_id AS "jobId"
+        FROM applications a
+        JOIN jobs j ON a.job_id = j.id
+        WHERE a.username = $1`,
+      [username],
+    );
+    const jobs = applicationsRes.rows;
+    user.jobsApplications = jobs.map((job) => job.title);
+
     return user;
   }
 
@@ -204,7 +226,29 @@ class User {
 
     if (!user) throw new NotFoundError(`No user: ${username}`);
   }
-}
 
+  static async applyToJob(username, jobId) {
+
+
+    try {
+      const result = await db.query(
+        `INSERT INTO applications (username, job_id)
+         VALUES ($1, $2)
+         RETURNING username, job_id AS "jobId"`,
+      [username, jobId],
+      );
+      const application = result.rows[0];
+      return application;     
+    } catch (err) {
+      if (err.code === "23505") { 
+        throw new BadRequestError("User has already applied to this job");
+      }
+      throw err;
+    }
+
+
+  }
+
+}
 
 module.exports = User;

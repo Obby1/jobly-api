@@ -9,3 +9,21 @@ To run this:
 To run the tests:
 
     jest -i
+
+## API Usage Guide
+
+To retreive information on jobs:
+
+    jest -i
+    
+To run the tests:
+
+    jest -i
+
+To run the tests:
+
+    jest -i
+
+To run the tests:
+
+    jest -i

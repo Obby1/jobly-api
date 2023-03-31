@@ -1,3 +1,4 @@
+/* test auth routes and JSON schema functions as intended */
 "use strict";
 
 const request = require("supertest");
@@ -16,10 +17,10 @@ beforeEach(commonBeforeEach);
 afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
-/************************************** POST /auth/token */
+/************************************** POST /auth/token tests */
 
 describe("POST /auth/token", function () {
-  test("works", async function () {
+  test("auth token route works as intended", async function () {
     const resp = await request(app)
         .post("/auth/token")
         .send({
@@ -31,7 +32,7 @@ describe("POST /auth/token", function () {
     });
   });
 
-  test("unauth with non-existent user", async function () {
+  test("return 401 error with non-existent user", async function () {
     const resp = await request(app)
         .post("/auth/token")
         .send({
@@ -41,7 +42,7 @@ describe("POST /auth/token", function () {
     expect(resp.statusCode).toEqual(401);
   });
 
-  test("unauth with wrong password", async function () {
+  test("return 401 error with wrong password", async function () {
     const resp = await request(app)
         .post("/auth/token")
         .send({
@@ -51,7 +52,7 @@ describe("POST /auth/token", function () {
     expect(resp.statusCode).toEqual(401);
   });
 
-  test("bad request with missing data", async function () {
+  test("return 400 error if missing password", async function () {
     const resp = await request(app)
         .post("/auth/token")
         .send({
@@ -60,7 +61,7 @@ describe("POST /auth/token", function () {
     expect(resp.statusCode).toEqual(400);
   });
 
-  test("bad request with invalid data", async function () {
+  test("return 400 error with invalid username", async function () {
     const resp = await request(app)
         .post("/auth/token")
         .send({
@@ -71,10 +72,10 @@ describe("POST /auth/token", function () {
   });
 });
 
-/************************************** POST /auth/register */
+/************************************** POST /auth/register tests */
 
 describe("POST /auth/register", function () {
-  test("works for anon", async function () {
+  test("new user registration works as intended", async function () {
     const resp = await request(app)
         .post("/auth/register")
         .send({
@@ -90,7 +91,7 @@ describe("POST /auth/register", function () {
     });
   });
 
-  test("bad request with missing fields", async function () {
+  test("return 400 error with bad request from missing fields", async function () {
     const resp = await request(app)
         .post("/auth/register")
         .send({
@@ -99,7 +100,7 @@ describe("POST /auth/register", function () {
     expect(resp.statusCode).toEqual(400);
   });
 
-  test("bad request with invalid data", async function () {
+  test("return 400 error with invalid email address", async function () {
     const resp = await request(app)
         .post("/auth/register")
         .send({

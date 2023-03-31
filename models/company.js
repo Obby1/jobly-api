@@ -49,17 +49,71 @@ class Company {
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
    * */
 
-  static async findAll() {
-    const companiesRes = await db.query(
-          `SELECT handle,
-                  name,
-                  description,
-                  num_employees AS "numEmployees",
-                  logo_url AS "logoUrl"
-           FROM companies
-           ORDER BY name`);
+  // // old route:
+  // static async findAll() {
+  //   const companiesRes = await db.query(
+  //         `SELECT handle,
+  //                 name,
+  //                 description,
+  //                 num_employees AS "numEmployees",
+  //                 logo_url AS "logoUrl"
+  //          FROM companies
+  //          ORDER BY name`);
+  //   return companiesRes.rows;
+  // }
+
+  // new route:
+  // declare filters as empty object to allow for call with no filters
+  // declare query as string then append where expressions and order by, queryValues at the end
+  static async findAll(filters = {}) {
+    let query = `SELECT handle,
+                        name,
+                        description,
+                        num_employees AS "numEmployees",
+                        logo_url AS "logoUrl"
+                FROM companies`;
+    let whereExpressions = [];
+    let queryValues = [];
+
+    // Destructure filters object for easier access
+    const { name, minEmployees, maxEmployees } = filters;
+
+    // Checks if name is truthy and if so adds a search parameter to queryValues 
+        // that matches any string containing name
+        // adds a WHERE expression to whereExpressions that searches for rows where the 
+            // name column matches the search parameter.
+    if (name) {
+      queryValues.push(`%${name}%`);
+      whereExpressions.push(`name ILIKE $${queryValues.length}`);
+    }
+
+    if (minEmployees !== undefined) {
+      queryValues.push(minEmployees);
+      whereExpressions.push(`num_employees >= $${queryValues.length}`);
+    }
+
+    if (maxEmployees !== undefined) {
+      queryValues.push(maxEmployees);
+      whereExpressions.push(`num_employees <= $${queryValues.length}`);
+    }
+
+    if (whereExpressions.length > 0) {
+      query += " WHERE " + whereExpressions.join(" AND ");
+    }
+    // order results by name
+    query += " ORDER BY name";
+
+    const companiesRes = await db.query(query, queryValues);
+    // example:
+      // SELECT handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl" 
+      // FROM companies 
+      // WHERE name ILIKE $1 AND num_employees >= $2 
+      // ORDER BY name, 
+      // ["%name%", numValue]
+
     return companiesRes.rows;
   }
+
 
   /** Given a company handle, return data about company.
    *
@@ -104,7 +158,10 @@ class Company {
         data,
         {
           numEmployees: "num_employees",
-          logoUrl: "logo_url",
+          logoUrl: "logo_url"
+          // adding more sql headers here in case they will be updated? may mess up func idx below
+          // name: "name",
+          // description: "description"
         });
     const handleVarIdx = "$" + (values.length + 1);
 
