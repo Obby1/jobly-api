@@ -30,21 +30,21 @@ To run the tests:
 
 Application Structure:
 
-    I followed the "separation of concerns" principle. 
+>   I followed the "separation of concerns" principle. 
     
-    Models folder handles SQL queries via a lightweight ORM. User/Job/Company models interact with the database and make modifying the SQL queries easier to manage. They also return the appropriate error messages related to possible data errors. 
+>   Models folder handles SQL queries via a lightweight ORM. User/Job/Company models interact with the database and make modifying the SQL queries easier to manage. They also return the appropriate error messages related to possible data errors. 
 
-    Routes folder defines all API endpoints and the logic for handling requests and responses. 
+>   Routes folder defines all API endpoints and the logic for handling requests and responses. 
 
-    Middleware folder contains functions for specific tasks like authentication & authorization. 
+>   Middleware folder contains functions for specific tasks like authentication & authorization. 
 
-    Helpers folder contains functions for JWT token generation & validation. It also contains a function for creating SQL queries for partial updates. 
+>   Helpers folder contains functions for JWT token generation & validation. It also contains a function for creating SQL queries for partial updates. 
 
-    Schemas folder contains JSON schemas which are validating against from the Routes. We return appropriate error messages to the user if the schema is violated. 
+>   Schemas folder contains JSON schemas which are validating against from the Routes. We return appropriate error messages to the user if the schema is violated. 
 
 Testing Structure:
 
-    148 tests have been written to cover all models, routes, functions, and configurations for this API. Tests should be run inband (jest -i) to prevent race conditions & allow tests to be run sequentially. 
+>   148 tests have been written to cover all models, routes, functions, and configurations for this API. Tests should be run inband (jest -i) to prevent race conditions & allow tests to be run sequentially. 
 
 
 Authentication Security:
