@@ -52,7 +52,7 @@ To register a new user send POST to http://localhost:3001/auth/register
 
 ### COMPANY ROUTES  
 To create new company POST to http://localhost:3001/companies
-[admin token required]
+<br>[admin token required]
     
     POST: http://localhost:3001/companies
     {
@@ -64,7 +64,7 @@ To create new company POST to http://localhost:3001/companies
     }
 
 To get list of companies, GET to http://localhost:3001/companies?minEmployees=0&maxEmployees=200
-[anonymous requests ok]
+<br>[anonymous requests ok]
 
     Optional filters can be added or removed:
         minEmployees= any num
@@ -72,13 +72,13 @@ To get list of companies, GET to http://localhost:3001/companies?minEmployees=0&
         name = any string
 
 To get request on specific company, GET to http://localhost:3001/companies/:handle
-[anonymous requests ok]
+<br>[anonymous requests ok]
 
     Sample company get request:
     http://localhost:3001/companies/anderson-arias-morrow
 
 To patch / delete a specific company, PATCH/DELETE to http://localhost:3001/companies/:handle
-[admin token required]
+<br>[admin token required]
 
     PATCH: http://localhost:3001/companies/anderson-arias-morrow
     Sample patch request:
@@ -91,7 +91,7 @@ To patch / delete a specific company, PATCH/DELETE to http://localhost:3001/comp
 
 ### JOBS ROUTES  
 To post new job, POST to http://localhost:3001/jobs
-[admin token required]
+<br>[admin token required]
 
     {
       "title": "1New Job",
@@ -101,39 +101,39 @@ To post new job, POST to http://localhost:3001/jobs
     }
     
 To get all jobs, GET to http://localhost:3001/jobs
-[anonymous requests ok]
+<br>[anonymous requests ok]
 
     Sample get request:
     http://localhost:3001/jobs
 
 To get job from job id, GET to http://localhost:3001/jobs/:id
-[anonymous requests ok]
+<br>[anonymous requests ok]
 
     Sample get request:
     http://localhost:3001/jobs/204
 
 To get job from company handle, GET to http://localhost:3001/jobs/companies/:handle
-[anonymous requests ok]
+<br>[anonymous requests ok]
 
     Sample get request:
     http://localhost:3001/jobs/companies/hall-davis
 
 To get job from job id, GET to http://localhost:3001/jobs/:jobid
-[anonymous requests ok]
+<br>[anonymous requests ok]
 
     Sample get request:
     http://localhost:3001/jobs/56
 
 
 To delete job from job id, DELETE to http://localhost:3001/jobs/:jobid
-[admin token required]
+<br>[admin token required]
 
     Sample delete request:
     http://localhost:3001/jobs/206
 
 ### USER ROUTES  
 To create a new user as admin, POST to http://localhost:3001/users
-[admin token required]
+<br>[admin token required]
 
     {
         "username": "u-new",
@@ -145,7 +145,7 @@ To create a new user as admin, POST to http://localhost:3001/users
     }
 
 To post a new job application, POST to http://localhost:3001/users/:username/jobs/:jobid
-[admin or matching user required]
+<br>[admin or matching user required]
 
     Sample post job application request:
     http://localhost:3001/users/u-new/jobs/2
