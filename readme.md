@@ -56,7 +56,7 @@ To create new company POST to http://localhost:3001/companies
     
     POST: http://localhost:3001/companies
     {
-      "handle": "new",
+      "handle": "1new",
       "name": "New Co",
       "description": "New test company",
       "numEmployees": 10,
@@ -86,7 +86,7 @@ To patch / delete a specific company, PATCH/DELETE to http://localhost:3001/comp
 	   "name": "anderson-arias-morrow-new"
     }
 
-    DELETE: http://localhost:3001/companies/anderson-arias-morrow
+    DELETE: http://localhost:3001/companies/1new
 
 
 ### JOBS ROUTES  

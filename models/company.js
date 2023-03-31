@@ -4,18 +4,13 @@ const db = require("../db");
 const { BadRequestError, NotFoundError } = require("../expressError");
 const { sqlForPartialUpdate } = require("../helpers/sql");
 
-/** Related functions for companies. */
 
 class Company {
-  /** Create a company (from data), update db, return new company data.
-   *
-   * data should be { handle, name, description, numEmployees, logoUrl }
-   *
-   * Returns { handle, name, description, numEmployees, logoUrl }
-   *
-   * Throws BadRequestError if company already in database.
-   * */
-
+  /* Create a company (from JSON data), update db, return new company data.
+  * data should be: { handle, name, description, numEmployees, logoUrl }
+  * => { handle, name, description, numEmployees, logoUrl }
+  * Throws BadRequestError if company already in database.
+  */
   static async create({ handle, name, description, numEmployees, logoUrl }) {
     const duplicateCheck = await db.query(
           `SELECT handle
@@ -39,32 +34,15 @@ class Company {
           logoUrl,
         ],
     );
-    const company = result.rows[0];
 
+    const company = result.rows[0];
     return company;
   }
 
-  /** Find all companies.
-   *
-   * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
-   * */
-
-  // // old route:
-  // static async findAll() {
-  //   const companiesRes = await db.query(
-  //         `SELECT handle,
-  //                 name,
-  //                 description,
-  //                 num_employees AS "numEmployees",
-  //                 logo_url AS "logoUrl"
-  //          FROM companies
-  //          ORDER BY name`);
-  //   return companiesRes.rows;
-  // }
-
-  // new route:
-  // declare filters as empty object to allow for call with no filters
-  // declare query as string then append where expressions and order by, queryValues at the end
+  /** Find all companies, accepts filters
+   * => [{ handle, name, description, numEmployees, logoUrl }]
+   * start with base query, add WHERE filters
+  */
   static async findAll(filters = {}) {
     let query = `SELECT handle,
                         name,
@@ -75,13 +53,8 @@ class Company {
     let whereExpressions = [];
     let queryValues = [];
 
-    // Destructure filters object for easier access
     const { name, minEmployees, maxEmployees } = filters;
 
-    // Checks if name is truthy and if so adds a search parameter to queryValues 
-        // that matches any string containing name
-        // adds a WHERE expression to whereExpressions that searches for rows where the 
-            // name column matches the search parameter.
     if (name) {
       queryValues.push(`%${name}%`);
       whereExpressions.push(`name ILIKE $${queryValues.length}`);
@@ -100,29 +73,23 @@ class Company {
     if (whereExpressions.length > 0) {
       query += " WHERE " + whereExpressions.join(" AND ");
     }
-    // order results by name
     query += " ORDER BY name";
 
     const companiesRes = await db.query(query, queryValues);
-    // example:
+    // example ending query:
       // SELECT handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl" 
       // FROM companies 
       // WHERE name ILIKE $1 AND num_employees >= $2 
       // ORDER BY name, 
       // ["%name%", numValue]
-
     return companiesRes.rows;
   }
 
 
-  /** Given a company handle, return data about company.
-   *
-   * Returns { handle, name, description, numEmployees, logoUrl, jobs }
-   *   where jobs is [{ id, title, salary, equity, companyHandle }, ...]
-   *
+  /* Given a company handle, return data about company.
+   * => { handle, name, description, numEmployees, logoUrl, jobs }
    * Throws NotFoundError if not found.
-   **/
-
+   */
   static async get(handle) {
     const companyRes = await db.query(
           `SELECT handle,
@@ -141,30 +108,20 @@ class Company {
     return company;
   }
 
-  /** Update company data with `data`.
-   *
-   * This is a "partial update" --- it's fine if data doesn't contain all the
-   * fields; this only changes provided ones.
-   *
+  /* Update company data with passed in `data`.
+   * Partial updates are OK using sqlForPartialUpdate
    * Data can include: {name, description, numEmployees, logoUrl}
-   *
-   * Returns {handle, name, description, numEmployees, logoUrl}
-   *
+   * => {handle, name, description, numEmployees, logoUrl}
    * Throws NotFoundError if not found.
    */
-
   static async update(handle, data) {
     const { setCols, values } = sqlForPartialUpdate(
         data,
         {
           numEmployees: "num_employees",
           logoUrl: "logo_url"
-          // adding more sql headers here in case they will be updated? may mess up func idx below
-          // name: "name",
-          // description: "description"
         });
     const handleVarIdx = "$" + (values.length + 1);
-
     const querySql = `UPDATE companies 
                       SET ${setCols} 
                       WHERE handle = ${handleVarIdx} 
@@ -181,8 +138,7 @@ class Company {
     return company;
   }
 
-  /** Delete given company from database; returns undefined.
-   *
+  /* Delete given company from database; returns undefined.
    * Throws NotFoundError if company not found.
    **/
 

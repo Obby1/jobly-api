@@ -1,4 +1,3 @@
-// Imports the BadRequestError class from the expressError module
 const { BadRequestError } = require("../expressError");
 
 // Generates a SQL query for partial update of an object in the database.
