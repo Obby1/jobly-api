@@ -24,12 +24,6 @@ beforeEach(commonBeforeEach);
 afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
-// To do:
-// Add better descriptions
-// Check coverage
-
-
-
 
 /************************************** authenticate user tests */
 

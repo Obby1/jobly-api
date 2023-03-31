@@ -14,7 +14,7 @@ const badJwt = jwt.sign({ username: "test", isAdmin: false }, "wrong");
 
 
 describe("authenticateJWT", function () {
-  test("works: Bearer Token via header", function () {
+  test("Bearer Token authentication via header works", function () {
     expect.assertions(2);
     const req = { headers: { authorization: `Bearer ${testJwt}` } };
     const res = { locals: {} };
@@ -68,7 +68,8 @@ describe("ensureLoggedIn", function () {
     };
     ensureLoggedIn(req, res, next);
   });
-  // Test to ensure ensureLoggedIn middleware works by calling next with error
+
+  // Test to ensure ensureLoggedIn middleware works by calling next no logged in user
   test("unauth if no login", function () {
     expect.assertions(1);
     const req = {};

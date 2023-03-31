@@ -1,7 +1,7 @@
 "use strict";
 
 describe("config can come from env", function () {
-  test("works", function() {
+  test("env config variables work inside app", function() {
     process.env.SECRET_KEY = "abc";
     process.env.PORT = "5000";
     process.env.DATABASE_URL = "other";
@@ -11,7 +11,7 @@ describe("config can come from env", function () {
     expect(config.SECRET_KEY).toEqual("abc");
     expect(config.PORT).toEqual(5000);
     expect(config.getDatabaseUri()).toEqual("other");
-    expect(config.BCRYPT_WORK_FACTOR).toEqual(12);
+    expect(config.BCRYPT_WORK_FACTOR).toEqual(13);
 
     delete process.env.SECRET_KEY;
     delete process.env.PORT;

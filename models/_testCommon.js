@@ -7,7 +7,7 @@ const { BCRYPT_WORK_FACTOR } = require("../config");
 let jobId1 = 0;
 let jobId2 = 0;
 
-
+// reset db before each test, add some test data
 async function commonBeforeAll() {
   await db.query("DELETE FROM companies");
   await db.query("DELETE FROM users");

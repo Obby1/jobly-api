@@ -12,7 +12,6 @@ const authRoutes = require("./routes/auth");
 const companiesRoutes = require("./routes/companies");
 const usersRoutes = require("./routes/users");
 const jobRoutes = require("./routes/jobs");
-
 const morgan = require("morgan");
 
 const app = express();

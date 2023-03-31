@@ -8,6 +8,7 @@ const Job = require("../models/job.js");
 
 const testJobIds = [];
 
+// reset db before each test, add some test data
 async function commonBeforeAll() {
   await db.query("DELETE FROM users");
   await db.query("DELETE FROM companies");
@@ -82,16 +83,17 @@ async function commonBeforeAll() {
 
 }
 
-
-
+// start a sql transaction (transactions will be temporary until committed or rolled back)
 async function commonBeforeEach() {
   await db.query("BEGIN");
 }
 
+// roll back transaction to undo any changes made during the test
 async function commonAfterEach() {
   await db.query("ROLLBACK");
 }
 
+// sever db connection 
 async function commonAfterAll() {
   await db.end();
 }

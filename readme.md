@@ -1,9 +1,15 @@
 # Jobly Backend
 
+## General Information
 This is the Express backend for Jobly, version 2.
 
-To get started: 
-Download the code, navigate to the directory, run the following commands in CLI:
+Tech Stack Used:
+
+    Node.js
+    Express
+    Jest + Supertest Library (testing)
+
+To get started run the following commands in CLI:
 
     npm init
     npm install
@@ -13,13 +19,45 @@ Download the code, navigate to the directory, run the following commands in CLI:
         \i jobly-schema.sql
         \i jobly-seed.sql
 
-To run this:
+To run the application:
 
     node server.js
     
 To run the tests:
 
     jest -i
+
+
+Application Structure:
+
+    I followed the "separation of concerns" principle. 
+    
+    Models folder handles SQL queries via a lightweight ORM. User/Job/Company models interact with the database and make modifying the SQL queries easier to manage. They also return the appropriate error messages related to possible data errors. 
+
+    Routes folder defines all API endpoints and the logic for handling requests and responses. 
+
+    Middleware folder contains functions for specific tasks like authentication & authorization. 
+
+    Helpers folder contains functions for JWT token generation & validation. It also contains a function for creating SQL queries for partial updates. 
+
+    Schemas folder contains JSON schemas which are validating against from the Routes. We return appropriate error messages to the user if the schema is violated. 
+
+Testing Structure:
+
+    148 tests have been written to cover all models, routes, functions, and configurations for this API. Tests should be run inband (jest -i) to prevent race conditions & allow tests to be run sequentially. 
+
+
+Authentication Security:
+
+    I used JWT based authentication to securely log in users and safely pass user data between endpoints and the server. I used middelware to ensure that users and admins can safely access the appropriate routes. 
+
+Error Handling:
+
+    I used custom error classes, JSON schemas, and middleware to inform the user of any potential errors made while using the API. 
+
+Improvements:
+
+    I'd like to add more security features for the application, technical skills needed for jobs, as well as technical skills for each user. I've also added simple to do lists at the bottom of some files for individual tasks I'd like to accomplish for that specific file. 
 
 ## API Usage Guide
 
