@@ -15,7 +15,7 @@ const companyUpdateSchema = require("../schemas/companyUpdate.json");
 const router = new express.Router();
 
 
-/* 
+/* Creates new company
 POST to /companies 
 { handle, name, description, numEmployees, logoUrl } =>  { company }
 Authorization required: login
@@ -35,13 +35,13 @@ router.post("/", ensureAdmin, async function (req, res, next) {
   }
 });
 
-/*
+/* Retreive list of all companies with optional filters
  GET to /companies  
  => { companies: [ { handle, name, description, numEmployees, logoUrl }, ...] }
- * Can filter on provided search filters:
+ * Optional filters can be added to query string:
  * - minEmployees
  * - maxEmployees
- * - nameLike (will find case-insensitive, partial matches)
+ * - nameLike 
 Authorization required: none
 */
 router.get("/", async function (req, res, next) {
@@ -75,14 +75,10 @@ router.get("/", async function (req, res, next) {
 
 
 
-/** GET /[handle]  =>  { company }
- *
- *  Company is { handle, name, description, numEmployees, logoUrl, jobs }
- *   where jobs is [{ id, title, salary, equity }, ...]
- *
- * Authorization required: none
- */
-
+/* Get information on specific company
+GET /companies/[handle]  =>  { company }
+Authorization required: none
+*/
 router.get("/:handle", async function (req, res, next) {
   try {
     const company = await Company.get(req.params.handle);
@@ -92,17 +88,11 @@ router.get("/:handle", async function (req, res, next) {
   }
 });
 
-/** PATCH /[handle] { fld1, fld2, ... } => { company }
- *
- * Patches company data.
- *
- * fields can be: { name, description, numEmployees, logo_url }
- *
- * Returns { handle, name, description, numEmployees, logo_url }
- *
- * Authorization required: login
- */
-
+/* Update company information
+PATCH /companies/[handle] 
+{ name, description, numEmployees, logo_url } => { company }
+Authorization required: login
+*/
 router.patch("/:handle", ensureAdmin, async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, companyUpdateSchema);
@@ -118,11 +108,10 @@ router.patch("/:handle", ensureAdmin, async function (req, res, next) {
   }
 });
 
-/** DELETE /[handle]  =>  { deleted: handle }
- *
- * Authorization: login
- */
-
+/* Delete a company
+DELETE /[handle]  =>  { deleted: handle }
+Authorization: login
+*/
 router.delete("/:handle", ensureAdmin, async function (req, res, next) {
   try {
     await Company.remove(req.params.handle);

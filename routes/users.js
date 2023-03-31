@@ -16,21 +16,10 @@ const Job = require("../models/job");
 const router = express.Router();
 
 
-/** POST / { user }  => { user, token }
- *
- * Adds a new user. This is not the registration endpoint --- instead, this is
- * only for admin users to add new users. The new user being added can be an
- * admin.
- *
- * This returns the newly created user and an authentication token for them:
- *  {user: { username, firstName, lastName, email, isAdmin }, token }
- *
- * Authorization required: login
- **/
-
-
-// exercise: Creating users should only permitted by admins (registration, however, should remain open to everyone).
-// below route is for user creation, not registration. Registration is in auth.js
+/* Create new user (not registration route, this is for admins)
+POST / { user }  => {user: { username, firstName, lastName, email, isAdmin }, token }
+Authorization required: admin
+*/
 router.post("/", ensureAdmin, async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, userNewSchema);
@@ -38,7 +27,6 @@ router.post("/", ensureAdmin, async function (req, res, next) {
       const errs = validator.errors.map(e => e.stack);
       throw new BadRequestError(errs);
     }
-
     const user = await User.register(req.body);
     const token = createToken(user);
     return res.status(201).json({ user, token });

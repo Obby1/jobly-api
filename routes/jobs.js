@@ -8,6 +8,11 @@ const { BadRequestError } = require("../expressError");
 
 const router = express.Router({ mergeParams: true });
 
+
+/* Create a new job
+POST /jobs {title, salary, equity, companyHandle} =>  { job }
+Authorization: admin
+*/
 router.post("/", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
     try {
       const validator = validate(req.body, jobNewSchema);
@@ -22,6 +27,11 @@ router.post("/", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
     }
   });
   
+
+/* Get list of all jobs
+GET /jobs =>  { jobs: [{job1}, {job2}, ... ] }
+Authorization: none
+*/
 router.get("/", async function (req, res, next) {
     try {
         const jobs = await Job.findAll(req.query);
@@ -31,6 +41,11 @@ router.get("/", async function (req, res, next) {
     }
 });
 
+
+/* Get job from job id
+GET /jobs/id =>  { job: {id, title, salary, equity, companyHandle} }
+Authorization: none
+*/
 router.get("/:id", async function (req, res, next) {
     try {
         const job = await Job.get(req.params.id);
@@ -40,6 +55,10 @@ router.get("/:id", async function (req, res, next) {
     }
 });
 
+/* Get job from company handle
+GET /jobs/companies/:handle =>  { jobs: [{job1}, {job2}, ... ] }
+Authorization: none
+*/
 router.get("/companies/:handle", async function (req, res, next) {
     try {
         const jobs = await Job.getJobsFromHandle(req.params.handle);
@@ -49,6 +68,10 @@ router.get("/companies/:handle", async function (req, res, next) {
     }
 });
 
+/* Get job from job id
+GET /jobs/id =>  { jobs: {id, title, salary, equity, companyHandle} }
+Authorization: none
+*/
 router.patch("/:id", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
     try {
         if ("id" in req.body || "companyHandle" in req.body) {
@@ -66,6 +89,10 @@ router.patch("/:id", ensureLoggedIn, ensureAdmin, async function (req, res, next
     }
 });
 
+/* Delete job
+DELETE /jobs/id =>  { deleted: id }
+Authorization: Admin
+*/
 router.delete("/:id", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
     try {
         await Job.remove(req.params.id);

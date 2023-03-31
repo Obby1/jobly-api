@@ -15,10 +15,6 @@ beforeEach(commonBeforeEach);
 afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
-// to do:
-// review test for coverage
-// add better titles
-
 
 /************************************** POST /jobs route tests */
 describe("POST /jobs", () => {
