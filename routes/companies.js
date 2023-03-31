@@ -16,14 +16,10 @@ const router = new express.Router();
 
 
 /** POST / { company } =>  { company }
- *
  * company should be { handle, name, description, numEmployees, logoUrl }
- *
- * Returns { handle, name, description, numEmployees, logoUrl }
- *
+ * Returns { handle, name, description, numEmployees, logoUrl 
  * Authorization required: login
- */
-
+*/
 router.post("/", ensureAdmin, async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, companyNewSchema);
