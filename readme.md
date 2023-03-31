@@ -67,8 +67,9 @@ To get list of companies, GET to http://localhost:3001/companies?minEmployees=0&
 [anonymous requests ok]
 
     Optional filters can be added or removed:
-    minEmployees= any num
-    maxEmployees= any num
+        minEmployees= any num
+        maxEmployees= any num
+        name = any string
 
 To get request on specific company, GET to http://localhost:3001/companies/handle
 [anonymous requests ok]

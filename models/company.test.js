@@ -155,14 +155,14 @@ describe("findAll", function () {
       },
     ]);
   });
-  
+
   test("find all with no matching filters returns an empty array", async function () {
     let companies = await Company.findAll({ name: "Nonexistent", minEmployees: 100, maxEmployees: 200 });
     expect(companies).toEqual([]);
   });
 });
 
-// /************************************** get tests*/
+/************************************** get tests*/
 
 describe("get", function () {
   test("get company works as intended", async function () {

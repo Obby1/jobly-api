@@ -175,9 +175,9 @@ describe("GET /companies", function () {
     });
   });
 
-    // there's no normal failure event which will cause this route to fail ---
-    // thus making it hard to test that the error-handler works with it. 
-    // below is a test that forces an error to occur in the route
+  // there's no normal failure event which will cause this route to fail ---
+  // thus making it hard to test that the error-handler works with it. 
+  // below is a test that forces an error to occur in the route
   test("test 500 error handler works by forcing next() error", async function () {
     await db.query("DROP TABLE companies CASCADE");
     const resp = await request(app)
@@ -186,6 +186,98 @@ describe("GET /companies", function () {
     expect(resp.statusCode).toEqual(500);
   });
 
+  test("get companies works with name filter", async function () {
+    const resp = await request(app).get("/companies?name=C1");
+    expect(resp.body).toEqual({
+      companies: [
+        {
+          handle: "c1",
+          name: "C1",
+          description: "Desc1",
+          numEmployees: 1,
+          logoUrl: "http://c1.img",
+        },
+      ],
+    });
+  });
+
+  test("get companies works with name and minEmployees filters", async function () {
+    const resp = await request(app).get("/companies?name=C&minEmployees=2");
+    expect(resp.body).toEqual({
+      companies: [
+        {
+          handle: "c2",
+          name: "C2",
+          description: "Desc2",
+          numEmployees: 2,
+          logoUrl: "http://c2.img",
+        },
+        {
+          handle: "c3",
+          name: "C3",
+          description: "Desc3",
+          numEmployees: 3,
+          logoUrl: "http://c3.img",
+        },
+      ],
+    });
+  });
+
+  test("get companies works with name and maxEmployees filters", async function () {
+    const resp = await request(app).get("/companies?name=C&maxEmployees=2");
+    expect(resp.body).toEqual({
+      companies: [
+        {
+          handle: "c1",
+          name: "C1",
+          description: "Desc1",
+          numEmployees: 1,
+          logoUrl: "http://c1.img",
+        },
+        {
+          handle: "c2",
+          name: "C2",
+          description: "Desc2",
+          numEmployees: 2,
+          logoUrl: "http://c2.img",
+        },
+      ],
+    });
+  });
+
+  test("get companies works with all filters", async function () {
+    const resp = await request(app).get("/companies?name=C&minEmployees=1&maxEmployees=3");
+    expect(resp.body).toEqual({
+      companies: [
+        {
+          handle: "c1",
+          name: "C1",
+          description: "Desc1",
+          numEmployees: 1,
+          logoUrl: "http://c1.img",
+        },
+        {
+          handle: "c2",
+          name: "C2",
+          description: "Desc2",
+          numEmployees: 2,
+          logoUrl: "http://c2.img",
+        },
+        {
+          handle: "c3",
+          name: "C3",
+          description: "Desc3",
+          numEmployees: 3,
+          logoUrl: "http://c3.img",
+        },
+      ],
+    });
+  });
+
+  test("get companies returns an empty array when no matching filters found", async function () {
+    const resp = await request(app).get("/companies?name=Nonexistent&minEmployees=100&maxEmployees=200");
+    expect(resp.body).toEqual({ companies: [] });
+  });
 
 });
 
