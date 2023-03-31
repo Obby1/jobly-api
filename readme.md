@@ -151,20 +151,20 @@ To post a new job application, POST to http://localhost:3001/users/:username/job
     http://localhost:3001/users/u-new/jobs/2
 
 To get all users, GET to http://localhost:3001/users
-[admin token required]
+<br>[admin token required]
 
     Sample get request:
     http://localhost:3001/users
 
 
 To get specific user info, GET to http://localhost:3001/users/:username
-[admin or matching user required]
+<br>[admin or matching user required]
 
     Sample get request:
     http://localhost:3001/users/testuser
 
 To update user info, PATCH to http://localhost:3001/users/:username
-[admin or matching user required]
+<br>[admin or matching user required]
 
     Sample patch request:
     http://localhost:3001/users/testuser
@@ -173,7 +173,7 @@ To update user info, PATCH to http://localhost:3001/users/:username
     }
 
 To delete user, DELETE to http://localhost:3001/users/:username
-[admin or matching user required]
+<br>[admin or matching user required]
 
     Sample delete request:
     http://localhost:3001/users/u-new
